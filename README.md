@@ -8,10 +8,11 @@ Each edge can be directed and unidirected, weighted and not (with default weight
 If all edges in graph are not weighted, then the whole graph considered not weighted
 
 Uses Breadth-first search for not weighted graphs 
-and Dijkstra search algorythm (not implemented) for weighted
+and Dijkstra search algorythm (not implemented, used BFS instead) for weighted
 
 Uses map of Vertex -> list of edges for storing Graph (Adjacency List)
-unidirected edges are edded to lists of both vertices
+
+Unidirected edges are added to lists of both vertices (source and destination)
 
 Possible performance optimizations:
 * switch to vertex indexes instead of links
