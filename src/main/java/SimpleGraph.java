@@ -2,6 +2,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Simple Graph library implementation
@@ -64,7 +65,7 @@ public class SimpleGraph<T> implements Graph<T> {
      * @return - returns a list of edges included in path
      */
     public List<GraphEdge<T>> getPath(T from, T to) {
-        if (true || !weighted) {
+        if (!weighted) {
             // use Breadth-first search by default
             return doBFS(from, to);
         } else {
@@ -149,7 +150,20 @@ public class SimpleGraph<T> implements Graph<T> {
         checkVertex(from, "From");
         checkVertex(to, "To");
         // place for algorithm
-        return null;
+        // (uses BFS instead)
+        return doBFS(from, to);
+    }
+
+    /**
+     * Apply Consumer function to all vertices
+     * (not tested)
+     *
+     * @param operation function to apply
+     */
+    public void traverse(Consumer<T> operation) {
+        for (T vertex : Vertices.keySet()) {
+            operation.accept(vertex);
+        }
     }
 
     /**
