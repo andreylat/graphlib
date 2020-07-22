@@ -16,3 +16,5 @@ unidirected edges are edded to lists of both vertices
 Possible performance optimizations:
 * switch to vertex indexes instead of links
 * do not store full edges; instead of lists use hashmaps with vertex index as a key and weight as a value (allows to store only one link between edges in one direction)
+
+Maybe it will be a good idea to have alternative path finding function getVertexPath, that returns a list of vertices (not edges).

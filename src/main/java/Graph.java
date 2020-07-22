@@ -15,4 +15,6 @@ public interface Graph<T> {
     void addEdge(GraphEdge<T> edge);
 
     List<GraphEdge<T>> getPath(T from, T to);
+
+    List<T> getVertexPath(T from, T to);
 }

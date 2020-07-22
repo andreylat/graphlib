@@ -154,6 +154,19 @@ public class SimpleGraph<T> implements Graph<T> {
         return doBFS(from, to);
     }
 
+
+    /**
+     * Get path from source vertex to destination vertex as a list of veertices
+     *
+     * @param from source vertex
+     * @param to   destination vertex
+     * @return returns a list of vertices in path
+     */
+    public List<T> getVertexPath(T from, T to) {
+        // not implemented (returns empty list)
+        return new LinkedList<T>();
+    }
+
     /**
      * Apply Consumer function to all vertices
      * (not tested)
@@ -165,6 +178,7 @@ public class SimpleGraph<T> implements Graph<T> {
             operation.accept(vertex);
         }
     }
+
 
     /**
      * Utility method for checking vertices
