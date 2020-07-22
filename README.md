@@ -1,5 +1,5 @@
 Simple Graph library.
-Support graphs with 2 types of edges - directed and undirected (weighted or with default weight) with 3 operations:
+Supports graphs with 2 types of edges - directed and undirected (weighted or with default weight) with 3 operations:
  * addVertex - adding a vertex of user type, 
  * addEdge - adding an edge,
  * getPath - finding a path from source vertex to destination vertex (returns a list of edges, exactly the same objects that were added by addEdge)
@@ -17,4 +17,4 @@ Possible performance optimizations:
 * switch to vertex indexes instead of links
 * do not store full edges; instead of lists use hashmaps with vertex index as a key and weight as a value (allows to store only one link between edges in one direction)
 
-Maybe it will be a good idea to have alternative path finding function getVertexPath, that returns a list of vertices (not edges).
+Maybe it will be a good idea to have an alternative path finding function getVertexPath, that returns a list of vertices instead of edges (added to interface and implementation, but not implemented).
