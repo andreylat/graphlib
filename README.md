@@ -1,5 +1,5 @@
-Simple Graph library
-Support 2 types of graph weighted edges - directed and undirected with 3 operations:
+Simple Graph library.
+Support graphs with 2 types of edges - directed and undirected (weighted or with default weight) with 3 operations:
  * addVertex - adding a vertex of user type, 
  * addEdge - adding an edge,
  * getPath - finding a path from source vertex to destination vertex (returns a list of edges, exactly the same objects that were added by addEdge)
