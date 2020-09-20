@@ -1,7 +1,5 @@
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -13,18 +11,27 @@ import java.util.function.Consumer;
  * @version 1.0.1
  */
 
-public class SimpleGraph<T> implements Graph<T> {
+abstract class AbstractGraph<T> implements Graph<T> {
     // Use map of Vertex -> list of edges for storing Graph (Adjacency List)
     // unidirected edges are edded to lists of both vertices
-    protected Map<T, LinkedList<GraphEdge<T>>> Vertices = new HashMap<>();
+    //private Map<T, LinkedList<GraphEdge<T>>> Vertices = new HashMap<>();
+    private GraphVerticesStore<T> Vertices = new GraphVerticesStoreHashMap<>();
+    private GraphSearchAlgorythm<T> searchAlgorythm;
+
+
     // possible performance optimizations:
     // switch to vertex indexes instead of links
     // do not store full edges -> use hashmap of vertex index as a key and weight as a value (allows to store only one link between edges in one direction)
 
     // Autodetectable flag of directed graph
-    protected boolean dir = false;
+    private boolean directed = false;
     // Autodetectable flag of weighted graph
-    protected boolean weighted = false;
+    private boolean weighted = false;
+
+    public AbstractGraph(boolean dir, GraphSearchAlgorythm<T> searchAlgorythm) {
+        directed = dir;
+        this.searchAlgorythm = searchAlgorythm;
+    }
 
     /**
      * Adds vertex of user type to the graph
@@ -32,8 +39,8 @@ public class SimpleGraph<T> implements Graph<T> {
      * @param vertex Vertex to add
      */
     public void addVertex(T vertex) {
-        if (vertex == null) throw new IllegalArgumentException("Null vertex");
-        Vertices.putIfAbsent(vertex, new LinkedList<GraphEdge<T>>());
+        if (vertex == null) throw new IllegalArgumentException("Can not add Null vertex to Graph");
+        Vertices.putIfAbsent(vertex);
     }
 
     /**
@@ -49,11 +56,7 @@ public class SimpleGraph<T> implements Graph<T> {
         // add link from source to destination
         Vertices.get(edge.getSrc()).add(edge);
         // for non directed edges add second (backward) link from destination to source
-        if (edge.isDir()) {
-            dir = true;
-        } else {
-            Vertices.get(edge.getDst()).add(edge);
-        }
+        if (!directed) Vertices.get(edge.getDst()).add(edge);
         if (edge.isWeighted()) weighted = true;
     }
 
@@ -65,93 +68,9 @@ public class SimpleGraph<T> implements Graph<T> {
      * @return - returns a list of edges included in path
      */
     public List<GraphEdge<T>> getPath(T from, T to) {
-        if (!weighted) {
-            // use Breadth-first search by default
-            return doBFS(from, to);
-        } else {
-            // possibly switch to Dijkstra’s algorithm if graph is weighted
-            // not implemented
-            return doDijkstra(from, to);
-        }
-    }
-
-    /**
-     * Simple implementation of Breadth-first search on graph
-     *
-     * @param from - source point
-     * @param to   - destination point
-     * @return - returns a list of edges included in path
-     */
-    private List<GraphEdge<T>> doBFS(T from, T to) {
         checkVertex(from, "From");
         checkVertex(to, "To");
-
-        LinkedList<T> frontier = new LinkedList<>();
-        frontier.offer(from);
-        Map<T, GraphEdge<T>> came_from = new HashMap<>();
-        came_from.put(from, null);
-
-        while (!frontier.isEmpty()) {
-            T current = frontier.poll();
-            if (current == to) break;
-            for (GraphEdge<T> lnk : Vertices.get(current)) {
-                // case for working with directed and not directed edges
-                T next = lnk.getSrc() == current ? lnk.getDst() : lnk.getSrc();
-                if (!came_from.containsKey(next)) {
-                    frontier.offer(next);
-                    came_from.put(next, lnk);
-                }
-            }
-        }
-
-        // build path
-        T current = to;
-
-        // Version with list of edges as a result
-        LinkedList<GraphEdge<T>> path = new LinkedList<>();
-        if (came_from.containsKey(current)) {
-            while (current != from) {
-                GraphEdge<T> prev = came_from.get(current);
-                path.push(prev);
-                // case for working with directed and not directed edges
-                current = prev.getDst() == current ? prev.getSrc() : prev.getDst();
-
-            }
-        }
-
-        /* Version with list of vertices as a result (not fully implemented)
-        LinkedList<T> path = new LinkedList<T>();
-        if (came_from.containsKey(current)) {
-            path.offer(current);
-            while (current != from) {
-                current = came_from.get(current);
-                path.push(current);
-            }
-            path.push(from);
-        }
-        */
-
-        // returns empty list if there is no path from one vertex to another
-        return path;
-    }
-
-    //Dijkstra’s algorithm (not implemented)
-
-    /**
-     * A placeholder for Dijkstra’s algorithm (not implemented)
-     * (search for optimal path in weighted graph)
-     *
-     * @param from - source point
-     * @param to   - destination point
-     * @return - returns a list of edges included in path
-     */
-    private List<GraphEdge<T>> doDijkstra(T from, T to) {
-        // not implemented
-        checkVertex(from, "From");
-        checkVertex(to, "To");
-        // place for algorithm
-        // (uses BFS instead)
-        return doBFS(from, to);
+        return (searchAlgorythm.getPath(Vertices, from, to));
     }
 
 
@@ -164,7 +83,7 @@ public class SimpleGraph<T> implements Graph<T> {
      */
     public List<T> getVertexPath(T from, T to) {
         // not implemented (returns empty list)
-        return new LinkedList<T>();
+        return new LinkedList<>();
     }
 
     /**
@@ -216,7 +135,7 @@ public class SimpleGraph<T> implements Graph<T> {
             // return false if source vertex is not in graph
             return (false);
         } else {
-            LinkedList<GraphEdge<T>> edges = this.Vertices.get(src);
+            List<GraphEdge<T>> edges = this.Vertices.get(src);
             return (edges.contains(edge));
         }
     }

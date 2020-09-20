@@ -8,7 +8,6 @@ public class GraphEdge<T> {
     private final T src; // source (from) vertex
     private final T dst; // destination (to) vertex
     private final int weight; // weight (typed int for simplicity)
-    private final boolean dir; // an indication that an edge is directional
     public final static int EDGE_DEFAULT_WEIGHT = 1; // default weight = 1
 
     /**
@@ -16,26 +15,16 @@ public class GraphEdge<T> {
      *
      * @param src    source (from) vertex
      * @param dst    destination (to) vertex
-     * @param dir    an indication that an edge is directional
      * @param weight weight (typed int for simplicity)
      */
-    public GraphEdge(T src, T dst, boolean dir, int weight) {
+    public GraphEdge(T src, T dst, int weight) {
         this.src = src;
         this.dst = dst;
         this.weight = weight;
-        this.dir = dir;
-    }
-
-    public GraphEdge(T src, T dst, boolean dir) {
-        this(src, dst, dir, EDGE_DEFAULT_WEIGHT);
-    }
-
-    public GraphEdge(T src, T dst, int weight) {
-        this(src, dst, false, weight);
     }
 
     public GraphEdge(T src, T dst) {
-        this(src, dst, false, EDGE_DEFAULT_WEIGHT);
+        this(src, dst, EDGE_DEFAULT_WEIGHT);
     }
 
     public T getSrc() {
@@ -50,9 +39,6 @@ public class GraphEdge<T> {
         return weight;
     }
 
-    public boolean isDir() {
-        return dir;
-    }
 
     /**
      * Check if current edge is weighted (weight of this edge is not default, makes all graph weighted)
@@ -65,6 +51,6 @@ public class GraphEdge<T> {
 
     @Override
     public String toString() {
-        return "GraphEdge{" + src + " --(" + weight + ")-" + (dir ? ">" : "-") + " " + dst + "}";
+        return "GraphEdge{" + src + " --(" + weight + ")-- " + " " + dst + "}";
     }
 }
