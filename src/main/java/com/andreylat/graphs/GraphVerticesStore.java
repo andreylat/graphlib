@@ -1,3 +1,5 @@
+package com.andreylat.graphs;
+
 import java.util.List;
 import java.util.Set;
 

@@ -1,17 +1,20 @@
+package com.andreylat.graphs;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class DirectedGraphTest {
-    private DirectedGraph<String> graph;
+class UnidirectedGraphTest {
+    private UnidirectedGraph<String> graph;
 
     @BeforeEach
     void setUp() {
-        graph = new DirectedGraph<String>(new GraphVerticesStoreHashMap<String>(), new GraphSearchAlgorythmBFS<String>());
+        graph = new UnidirectedGraph<String>(new GraphVerticesStoreHashMap<String>(), new GraphSearchAlgorythmBFS<String>());
         graph.addVertex("Root");
         graph.addVertex("Level1-1");
         graph.addVertex("Level1-2");
@@ -32,37 +35,6 @@ class DirectedGraphTest {
     }
 
     @Test
-    void addVertex() {
-        assertFalse(graph.containsVertex("some"));
-        graph.addVertex("some");
-        assertTrue(graph.containsVertex("some"));
-
-        // Checks for exceptions:
-
-        // null vertex
-        assertThrows(IllegalArgumentException.class, () -> graph.addVertex(null));
-    }
-
-    @Test
-    void addEdge() {
-        GraphEdge<String> edge = new GraphEdge<String>("Other-1", "Other-2");
-        assertFalse(graph.containsEdge(edge));
-        graph.addEdge(edge);
-        assertTrue(graph.containsEdge(edge));
-
-        // Checks for exceptions:
-
-        // null edge
-        assertThrows(IllegalArgumentException.class, () -> graph.addEdge(null));
-
-        // edge with null vertex
-        assertThrows(IllegalArgumentException.class, () -> graph.addEdge(new GraphEdge<String>(null, null)));
-
-        // edge with vertex not from graph
-        assertThrows(IllegalArgumentException.class, () -> graph.addEdge(new GraphEdge<String>("Something-not-in-graph", "Another-not-in-graph")));
-    }
-
-    @Test
     void getPath() {
         List<GraphEdge<String>> edges;
         // Check for existing 2 edges path (way with directed edges)
@@ -71,7 +43,7 @@ class DirectedGraphTest {
 
         // Check for existing (not reacheble in this direction) 2 edges path backward (way with directed edges)
         edges = graph.getPath("Level1-1-2", "Root");
-        assertEquals(0, edges.size());
+        assertEquals(2, edges.size());
 
         // Check for existing 2 edges path (non directed edges)
         edges = graph.getPath("Root", "Level1-1-1");
@@ -79,7 +51,7 @@ class DirectedGraphTest {
 
         // Check for existing 2 edges path backward (non directed edges)
         edges = graph.getPath("Level1-1-1", "Root");
-        assertEquals(0, edges.size());
+        assertEquals(2, edges.size());
 
         // Check for existing 1 edge path from root
         edges = graph.getPath("Root", "Level1-1");

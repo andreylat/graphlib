@@ -1,3 +1,5 @@
+package com.andreylat.graphs;
+
 /**
  * Class for graph edge
  * (Custom equals+hashCode are not implemented for simplicity, comparing by link values)
