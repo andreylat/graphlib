@@ -1,5 +1,5 @@
 #Simple Graph library.
-Project is incomplete...
+Project is incomplete... 
 
 Contains interface and 2 implementations: directed and unidirected graphs.
 Supports different search algorythms (Breadth-first search - implemented and Dijkstra - not implemented)
