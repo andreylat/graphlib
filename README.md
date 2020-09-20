@@ -1,4 +1,6 @@
-Simple Graph library.
+#Simple Graph library.
+Project is incomplete...
+
 Contains interface and 2 implementations: directed and unidirected graphs.
 Supports different search algorythms (Breadth-first search - implemented and Dijkstra - not implemented)
 and different storage types (hashMap - implemented)
