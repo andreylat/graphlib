@@ -15,7 +15,7 @@ abstract class AbstractGraph<T> implements Graph<T> {
     // Use map of Vertex -> list of edges for storing Graph (Adjacency List)
     // unidirected edges are edded to lists of both vertices
     //private Map<T, LinkedList<GraphEdge<T>>> Vertices = new HashMap<>();
-    private GraphVerticesStore<T> Vertices = new GraphVerticesStoreHashMap<>();
+    private GraphVerticesStore<T> vertices;
     private GraphSearchAlgorythm<T> searchAlgorythm;
 
 
@@ -28,8 +28,9 @@ abstract class AbstractGraph<T> implements Graph<T> {
     // Autodetectable flag of weighted graph
     private boolean weighted = false;
 
-    public AbstractGraph(boolean dir, GraphSearchAlgorythm<T> searchAlgorythm) {
+    public AbstractGraph(boolean dir, GraphVerticesStore<T> vertices, GraphSearchAlgorythm<T> searchAlgorythm) {
         directed = dir;
+        this.vertices = vertices;
         this.searchAlgorythm = searchAlgorythm;
     }
 
@@ -40,7 +41,7 @@ abstract class AbstractGraph<T> implements Graph<T> {
      */
     public void addVertex(T vertex) {
         if (vertex == null) throw new IllegalArgumentException("Can not add Null vertex to Graph");
-        Vertices.putIfAbsent(vertex);
+        vertices.putIfAbsent(vertex);
     }
 
     /**
@@ -54,9 +55,9 @@ abstract class AbstractGraph<T> implements Graph<T> {
         checkVertex(edge.getDst(), "Dst");
 
         // add link from source to destination
-        Vertices.get(edge.getSrc()).add(edge);
+        vertices.get(edge.getSrc()).add(edge);
         // for non directed edges add second (backward) link from destination to source
-        if (!directed) Vertices.get(edge.getDst()).add(edge);
+        if (!directed) vertices.get(edge.getDst()).add(edge);
         if (edge.isWeighted()) weighted = true;
     }
 
@@ -70,7 +71,7 @@ abstract class AbstractGraph<T> implements Graph<T> {
     public List<GraphEdge<T>> getPath(T from, T to) {
         checkVertex(from, "From");
         checkVertex(to, "To");
-        return (searchAlgorythm.getPath(Vertices, from, to));
+        return (searchAlgorythm.getPath(vertices, from, to));
     }
 
 
@@ -93,7 +94,7 @@ abstract class AbstractGraph<T> implements Graph<T> {
      * @param operation function to apply
      */
     public void traverse(Consumer<T> operation) {
-        for (T vertex : Vertices.keySet()) {
+        for (T vertex : vertices.keySet()) {
             operation.accept(vertex);
         }
     }
@@ -108,7 +109,7 @@ abstract class AbstractGraph<T> implements Graph<T> {
      */
     private void checkVertex(T vertex, String addTxt) {
         if (vertex == null) throw new IllegalArgumentException(addTxt + " Vertex is null");
-        if (!Vertices.containsKey(vertex)) throw new IllegalArgumentException(addTxt + " Vertex is not in Graph");
+        if (!vertices.containsKey(vertex)) throw new IllegalArgumentException(addTxt + " Vertex is not in Graph");
     }
 
     /**
@@ -118,7 +119,7 @@ abstract class AbstractGraph<T> implements Graph<T> {
      * @return returns true if graph contains vertex
      */
     public boolean containsVertex(T vertex) {
-        return (Vertices.containsKey(vertex));
+        return (vertices.containsKey(vertex));
     }
 
     /**
@@ -131,11 +132,11 @@ abstract class AbstractGraph<T> implements Graph<T> {
         if (edge == null) throw new IllegalArgumentException("Null edge");
         T src = edge.getSrc();
         if (src == null) throw new IllegalArgumentException("Null edge.src");
-        if (!Vertices.containsKey(src)) {
+        if (!vertices.containsKey(src)) {
             // return false if source vertex is not in graph
             return (false);
         } else {
-            List<GraphEdge<T>> edges = this.Vertices.get(src);
+            List<GraphEdge<T>> edges = this.vertices.get(src);
             return (edges.contains(edge));
         }
     }
@@ -146,6 +147,6 @@ abstract class AbstractGraph<T> implements Graph<T> {
      * @return returns set of graph vertices
      */
     public java.util.Set<T> getVertices() {
-        return (Vertices.keySet());
+        return (vertices.keySet());
     }
 }

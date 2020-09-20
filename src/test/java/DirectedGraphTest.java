@@ -11,7 +11,7 @@ class DirectedGraphTest {
 
     @BeforeEach
     void setUp() {
-        graph = new DirectedGraph<String>(new GraphSearchAlgorythmBFS<String>());
+        graph = new DirectedGraph<String>(new GraphVerticesStoreHashMap<String>(), new GraphSearchAlgorythmBFS<String>());
         graph.addVertex("Root");
         graph.addVertex("Level1-1");
         graph.addVertex("Level1-2");

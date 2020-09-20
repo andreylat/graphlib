@@ -12,7 +12,7 @@ class UnidirectedGraphTest {
 
     @BeforeEach
     void setUp() {
-        graph = new UnidirectedGraph<String>(new GraphSearchAlgorythmBFS<String>());
+        graph = new UnidirectedGraph<String>(new GraphVerticesStoreHashMap<String>(), new GraphSearchAlgorythmBFS<String>());
         graph.addVertex("Root");
         graph.addVertex("Level1-1");
         graph.addVertex("Level1-2");
