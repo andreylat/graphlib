@@ -1,4 +1,5 @@
-#Simple Graph library.
+Simple Graph library.
+
 Project is incomplete... 
 
 Contains interface and 2 implementations: directed and unidirected graphs.
